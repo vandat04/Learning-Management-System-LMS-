@@ -9,12 +9,12 @@ import com.lms.entity.auth.User;
 import com.lms.entity.auth.UserProfile;
 import com.lms.entity.interaction.OTP;
 import com.lms.exception.AppException;
-import com.lms.repository.auth.RoleRepository;
 import com.lms.repository.auth.UserProfileRepository;
 import com.lms.repository.auth.UserRepository;
 import com.lms.repository.auth.UserRoleRepository;
 import com.lms.repository.interaction.OTPRespository;
 import com.lms.service.auth.EmailService;
+import com.lms.service.auth.FileUploadService;
 import com.lms.service.auth.UserService;
 import com.lms.util.BaseResponse;
 import com.lms.util.SecurityUtil;
@@ -25,6 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -34,10 +37,10 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
-    private final RoleRepository roleRepository;
     private final UserProfileRepository userProfileRepository;
     private final OTPRespository otpRespository;
     private final EmailService emailService;
+    private final FileUploadService fileUploadService;
     private final Validate validate;
     private final BaseResponse baseResponse;
     private final PasswordEncoder passwordEncoder;
@@ -69,7 +72,6 @@ public class UserServiceImpl implements UserService {
         Integer userId = SecurityUtil.getCurrentUserId();
         String fullName = request.getFullName();
         String phone = request.getPhone();
-        String avatarUrl = request.getAvatarUrl();
         String bio = request.getBio();
 
         validate.checkNull(userId);
@@ -79,7 +81,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
-        userProfile.setUserId(userId);
         if (fullName != null ) {
             validate.validateFullName(fullName);
             userProfile.setFullName(fullName);
@@ -88,10 +89,23 @@ public class UserServiceImpl implements UserService {
             validate.validatePhone(phone);
             userProfile.setPhone(phone);
         }
-        if (avatarUrl != null) userProfile.setAvatarUrl(avatarUrl);
-        if (bio != null) userProfile.setBio(bio);
+        if (bio != null) {
+            validate.validateBio(bio);
+            userProfile.setBio(bio);
+        }
+
         userProfileRepository.save(userProfile);
 
+        return baseResponse.getUserProfile(userId);
+    }
+
+    @Override
+    public UserProfileResponse userUpdateImageProfile(MultipartFile file)  throws IOException{
+        Integer userId = SecurityUtil.getCurrentUserId();
+        UserProfile userProfile = userProfileRepository.findByUserId(userId);
+        String avetarUrl = fileUploadService.uploadImage(file);
+        userProfile.setAvatarUrl(avetarUrl);
+        userProfileRepository.save(userProfile);
         return baseResponse.getUserProfile(userId);
     }
 

@@ -43,14 +43,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(LoginRequest request) {
+        String email = request.getEmail();
+        String password = request.getPassword();
         //Lấy thông tin theo gmail
-        User user = userRepository.findByEmail(request.getEmail());
-        if (user == null) {
-            throw new AppException("Email not exist", HttpStatus.BAD_REQUEST);
-        }
+        validate.checkEmailExists(email);
+        User user = userRepository.findByEmail(email);
         //Check pass
-        validate.validatePassword(request.getPassword());
-        validate.checkPasswordMatch(request.getPassword(), user.getPasswordHash());
+        validate.checkNull(password);
+        validate.checkPasswordMatch(password, user.getPasswordHash());
         validate.checkActive(user.getIsActive());
         //Check role
         UserRole userRole = userRoleRepository.findByUserId(user.getId());
@@ -111,17 +111,20 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void registerStudent(RegisterRequest request) {
+        String email = request.getEmail();
+        String password = request.getPassword();
+        String fullName = request.getFullName();
         //Check
-        validate.checkNull(request.getEmail());
-        validate.validateEmail(request.getEmail());
-        validate.checkNull(request.getPassword());
-        validate.validatePassword(request.getPassword());
-        validate.checkNull(request.getFullName());
-        validate.validateFullName(request.getFullName());
+        validate.checkNull(email);
+        validate.checkNull(password);
+        validate.checkNull(fullName);
+        validate.validateEmail(email);
+        validate.validatePassword(password);
+        validate.validateFullName(fullName);
         //Tạo thông tin user
         User user = new User();
-        user.setEmail(request.getEmail());
-        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setEmail(email);
+        user.setPasswordHash(passwordEncoder.encode(password));
         user.setIsActive(true);
         user.setAuthProvider("LOCAL");
         user.setCreatedAt(LocalDateTime.now());
@@ -134,7 +137,7 @@ public class AuthServiceImpl implements AuthService {
         //Tạo profile
         UserProfile profile = new UserProfile();
         profile.setUserId(savedUser.getId());
-        profile.setFullName(request.getFullName());
+        profile.setFullName(fullName);
         profile.setRatingAvg(BigDecimal.valueOf(0.0));
         profile.setNumberReview(0);
         userProfileRepository.save(profile);

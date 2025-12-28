@@ -1,67 +1,81 @@
                 I.Authentication/
 1. Register:
-    Json:(gmail, password, fullname)
-    Check:
-        -Gmail: + Không null
-                + Đúng định dạng (@gmail.com)
-                + Chưa tồn tại
-        -Password: + Không null
-                   + >= 8 kí tự
-                   + Chữ hoa, thường, số, kí tự đặc biệt
-        - FullName: + Dài hơn 2, ngắn hơn 50
-                    + Không null
-                    + Không có kí tự đặc biệt, số
+    SQL: users, user_roles , user_profiles
+    Json:(email, password, fullName)
+    Luồng: 1. Kiểm tra dữ liệu sau khi nhập
+             + Check null cho tất cả
+             + email: check exist trong DB, check form
+             + password: check độ dài tối thiếu(8), check điều kiện pass
+             + fullName: check độ dài(2-50), check kí tự đặc biệt
+           2. Tạo dữ liệu cho bảng user:
+             + hashPassword, active = true, AuthProvider = LOCAL
+           3. Tạo role cho user mới
+           4. Tạo profile với fullName
                     
 2. Login:
+    SQL: users
     Json: (gmail, password)
-    Check:
-        -Gmail: + Không null
-                + Đúng định dạng (@gmail.com)
-        -Password: + Không null
-                   + >= 8 kí tự
-                   + Chữ hoa, thường, số, kí tự đặc biệt
+    Luồng: 1. Kiểm tra email có tồn tại trong DB hay chưa
+           2. Lấy ra user với email đó
+           3. Kiểm tra password != null
+           4. Kiểm tra password có match với hashPassword
+           5. Kiểm tra active = 1
+           6. Lấy ra role của user
+           7. Generate token
 
 3. User Update Profile:
-    Json: (userId, fullName, phone, avatar, bio)
-    Check:
-        - UserID: + Check null
-        - FullName: + Dài hơn 2, ngắn hơn 50
-                    + Không null
-                    + Không có kí tự đặc biệt, số
-        - Phone: + Không null
-                 + = 10 số
-                 + Bắt đầu bằng số 0
----> Kiểm tra userId , Lấy User thông qua userId (cập nhật updated_at) , Lấy UserProfile (cập nhật lại thông tin cần cập nhật)
+    SQL: users, user_profiles
+    Json: (userId, fullName, phone, bio)
+    Luồng: 1. Lấy ra user theo token đã login
+           2. Lấy ra userProfile theo userId của user
+           3. set Update trong user
+           4. Kiểm tra thông tin fullName, phone, bio
+           5. Cập nhật các thông tin vào userProfile nếu có thay đổi
+           6. Trả về User FullInfor
 
-4. User Change Password:
+4. User Update Image Profile:
+    SQL: users, user_profiles
+    Json: (file)
+    Luồng: 1. Lấy ra user theo token đã login
+           2. Lấy ra userProfile theo userId của user
+           3. Set Update trong user
+           3. Kiểm tra file đẩy lên cloud lấy Url
+           4. Cập nhật Url vào userProfile
+           5. Trả về User FullInfor
+
+5. User Change Password:
+    SQL: users
     Json: (oldPassword, newPassword, confirmPassword)
-    Check: 
-        - Như check pass bthuong
-        - oldPassword tồn tại
----> Check oldPassword == userPassword, validate cho newPassword, newPassword == confirmPassword, update Password
+    Luồng: 1. Lấy ra user theo token đã login
+           2. Check xem oldPassword có match với hashPassword
+           3. Check điều kiện của newPassword, confirmPassword
+           4. HashPassword cho newPassword
+           5. Lưu lại newPassowrd
 
-5. Login With Google
+
+6. Login With Google
    Json: (googleToken)
 ---> FE lấy googleToken , Lấy các thông tin liên quan từ token như: email, fullname, avatarUrl, googleId, Kiểm tra xem user đã tồn tại hay chưa,
 nếu rồi thì kiểm tra xem là dạng LOCAL hay GOOGLE, nếu LOCAL out, user = null thì tạo account mới, nếu là tài khoản GOOGLE thì kiểm tra googleId có trùng không,
 nếu trùng thì lấy Role rồi tạo JWT
+    SQL: users, user_roles , user_profiles
 
-6. Quên password
-    - Sau khi nhập email và ấn gửi OTP
-    - Check email có tồn tại user hay chưa, kiểm tra tài khoản lại gì, còn hoạt động không
-    - Tạo 1 bảng trong database với OTP(id, email, code, start_at, end_at) - end_at sau 3p kể từ khi tạo
-    - Lưu OTP vào bảng OTP --> Gửi mail với nội dung(Code:... + Link reset password)
-    - Kiểm tra xem OTP còn hoạt động hay không thông qua end_at.
-        + Nếu còn chuyển qua mục nhập newpass + confirmpass.
-        + Nếu hết thì bắt gửi lại OTP mới
-    - Sau khi kiểm tra xoá bỏ OTP đó
+7. Quên password
+    SQL: user, otp_reset_password
+    Json: (email)
+    Luồng: 1. Check xem email có tồn tại trong DB chưa, check active = 1
+           2. Tạo OTP có 6 chữ bất kì. hash OTP.
+           3. lưu vào bảng  otp_reset_password với hạn sử dụng 3p
+           4. Gửi OTP đó đến email yêu cầu
 
-7. Đổi mật khẩu:
-    - Nhập OTP, newpassword, confirmpasswod
-    - Kiểm tra OTP còn hoạt động hay không
-    - Kiêm tra newpassword, confirmpassword đủ điều kiện, và trùng nhau khoong
+    Đổi mật khẩu:
+        Json: (email, OTP, newPassword, confirmPasswod)
+        Luồng: 1. Kiểm tra OTP còn lượt nhập không
+               2. Check newPassword, confirmPassword theo điều kiện
+               3. Hash và lưu lại newPassword theo user của email
+               4. Xoá OTP đã dùng
 
+7. Log out:
+    SQL: invalid_tokens
+    Luồng: 1. Lưu vào invalid_token để không thể sử dụng ở mọi nơi nữa
 
-8. Log out:
-    - Lưu token và thời gian hết hạn vào 1 bảng sau khi ấn logout, khi đã log out thì không thể sử dụng được token đó nữa
-    - Sau 1 ngày server tự reset để xoá các token đã hết hạn.

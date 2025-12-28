@@ -1,5 +1,6 @@
 package com.lms.service.impl.auth;
 
+import org.springframework.beans.factory.annotation.Value;
 import com.lms.service.auth.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,8 +17,10 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
-    private static final String SECRET = "INDIVIDUALPROJECTLEARNINGMANAGEMENTSYSTEMHEHEHE";
-    private static final Integer TIME = 1000 * 60 * 60 * 24;
+    @Value("${jwt.secret}")
+    private String SECRET;
+    @Value("${jwt.expiration}")
+    private int TIME;
 
     @Override
     public String generateToken(Integer userId, String email, String role) {

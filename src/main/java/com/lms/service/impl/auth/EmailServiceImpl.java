@@ -21,7 +21,7 @@ public class EmailServiceImpl implements EmailService {
         Email email = new Email();
         email.setToEmail(toMail);
         email.setSubject("OTP to reset password");
-        email.setBody("Your OTP is valid for 3 minutes:" + code);
+        email.setBody("Your OTP is valid for 3 minutes: " + code);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("dattruong02112004@gmail.com");
