@@ -60,3 +60,8 @@ nếu trùng thì lấy Role rồi tạo JWT
     - Nhập OTP, newpassword, confirmpasswod
     - Kiểm tra OTP còn hoạt động hay không
     - Kiêm tra newpassword, confirmpassword đủ điều kiện, và trùng nhau khoong
+
+
+8. Log out:
+    - Lưu token và thời gian hết hạn vào 1 bảng sau khi ấn logout, khi đã log out thì không thể sử dụng được token đó nữa
+    - Sau 1 ngày server tự reset để xoá các token đã hết hạn.
