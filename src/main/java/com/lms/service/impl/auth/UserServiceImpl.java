@@ -1,4 +1,4 @@
-package com.lms.service.impl;
+package com.lms.service.impl.auth;
 
 import com.lms.dto.request.UserChangePasswordRequest;
 import com.lms.dto.request.UserGetOTPRequest;
@@ -14,8 +14,8 @@ import com.lms.repository.auth.UserProfileRepository;
 import com.lms.repository.auth.UserRepository;
 import com.lms.repository.auth.UserRoleRepository;
 import com.lms.repository.interaction.OTPRespository;
-import com.lms.service.EmailService;
-import com.lms.service.UserService;
+import com.lms.service.auth.EmailService;
+import com.lms.service.auth.UserService;
 import com.lms.util.BaseResponse;
 import com.lms.util.SecurityUtil;
 import com.lms.util.Validate;

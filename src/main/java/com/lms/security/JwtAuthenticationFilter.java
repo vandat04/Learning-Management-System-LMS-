@@ -1,11 +1,14 @@
 package com.lms.security;
 
-import com.lms.service.JwtService;
+import com.lms.exception.AppException;
+import com.lms.service.auth.JwtService;
+import com.lms.service.impl.auth.LogoutServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +25,7 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final LogoutServiceImpl logoutService;
 
     @Override
     protected void doFilterInternal(
@@ -38,6 +42,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
+
+        if (logoutService.existsByToken(token)) {
+            throw new AppException( "Please login again!", HttpStatus.BAD_REQUEST);
+        }
+
         String email = jwtService.extractEmail(token);
         Integer userId = jwtService.extractUserId(token);
 

@@ -1,4 +1,4 @@
-package com.lms.service;
+package com.lms.service.auth;
 
 import com.lms.dto.request.UserChangePasswordRequest;
 import com.lms.dto.request.UserGetOTPRequest;
@@ -6,7 +6,6 @@ import com.lms.dto.request.UserResetPasswordRequest;
 import com.lms.dto.request.UserUpdateProfileRequest;
 import com.lms.dto.response.UserProfileResponse;
 import com.lms.entity.auth.User;
-import com.lms.entity.auth.UserProfile;
 
 public interface UserService {
     User findByEmail(String email);

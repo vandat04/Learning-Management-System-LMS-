@@ -1,4 +1,4 @@
-package com.lms.service.impl;
+package com.lms.service.impl.auth;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.lms.dto.request.LoginGoogleRequest;
@@ -14,8 +14,8 @@ import com.lms.repository.auth.UserProfileRepository;
 import com.lms.repository.auth.UserRepository;
 import com.lms.repository.auth.UserRoleRepository;
 import com.lms.security.GoogleTokenVerifier;
-import com.lms.service.AuthService;
-import com.lms.service.JwtService;
+import com.lms.service.auth.AuthService;
+import com.lms.service.auth.JwtService;
 import com.lms.util.Validate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

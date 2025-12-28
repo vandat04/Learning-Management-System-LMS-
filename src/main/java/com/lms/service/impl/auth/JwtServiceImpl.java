@@ -1,9 +1,11 @@
-package com.lms.service.impl;
+package com.lms.service.impl.auth;
 
-import com.lms.service.JwtService;
+import com.lms.service.auth.JwtService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,34 +31,33 @@ public class JwtServiceImpl implements JwtService {
                 .compact();
     }
 
-    @Override
-    public String extractEmail(String token) {
+    private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .setSigningKey(getSigningKey()).build()
+                .parseClaimsJws(token).getBody();
     }
 
     @Override
-    public String extractRole(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("role", String.class);
+    public String extractEmail(String token) { return extractAllClaims(token).getSubject(); }
+
+    @Override
+    public String extractRole(String token) { return extractAllClaims(token).get("role", String.class); }
+
+    @Override
+    public Integer extractUserId(String token) { return extractAllClaims(token).get("userId", Integer.class); }
+
+    @Override
+    public Date getExpirationTime(String token) {
+        return extractAllClaims(token).getExpiration();
     }
 
     @Override
-    public Integer extractUserId(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("userId", Integer.class);
+    public String extractToken(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            return header.substring(7);
+        }
+        return null;
     }
 
     private Key getSigningKey() {

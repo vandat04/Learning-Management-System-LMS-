@@ -1,8 +1,12 @@
 package com.lms.controller.auth;
 
 import com.lms.dto.request.*;
-import com.lms.service.AuthService;
-import com.lms.service.UserService;
+
+import com.lms.service.auth.AuthService;
+import com.lms.service.auth.JwtService;
+import com.lms.service.auth.LogoutService;
+import com.lms.service.auth.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +20,8 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
+    private final LogoutService logoutService;
+    private final JwtService jwtService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -64,6 +70,13 @@ public class AuthController {
     public ResponseEntity<?> resetPassword(@RequestBody UserResetPasswordRequest request) {
         userService.resetPassword(request);
         return ResponseEntity.ok("Reset password success. Please login again!");
+    }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        logoutService.logout(jwtService.extractToken(request));
+        return ResponseEntity.ok("Logged out");
     }
 
 }

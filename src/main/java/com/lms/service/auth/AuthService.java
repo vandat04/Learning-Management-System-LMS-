@@ -1,4 +1,4 @@
-package com.lms.service;
+package com.lms.service.auth;
 
 import com.lms.dto.request.LoginGoogleRequest;
 import com.lms.dto.request.LoginRequest;

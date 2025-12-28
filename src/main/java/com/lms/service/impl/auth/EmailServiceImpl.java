@@ -1,7 +1,7 @@
-package com.lms.service.impl;
+package com.lms.service.impl.auth;
 
 import com.lms.entity.interaction.Email;
-import com.lms.service.EmailService;
+import com.lms.service.auth.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

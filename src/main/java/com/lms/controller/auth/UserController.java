@@ -2,7 +2,7 @@ package com.lms.controller.auth;
 
 import com.lms.dto.request.UserChangePasswordRequest;
 import com.lms.dto.request.UserUpdateProfileRequest;
-import com.lms.service.UserService;
+import com.lms.service.auth.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
