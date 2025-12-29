@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -121,6 +120,7 @@ public class AuthServiceImpl implements AuthService {
         validate.validateEmail(email);
         validate.validatePassword(password);
         validate.validateFullName(fullName);
+        validate.validateByAI(fullName);
         //Tạo thông tin user
         User user = new User();
         user.setEmail(email);

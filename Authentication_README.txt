@@ -6,7 +6,7 @@
              + Check null cho tất cả
              + email: check exist trong DB, check form
              + password: check độ dài tối thiếu(8), check điều kiện pass
-             + fullName: check độ dài(2-50), check kí tự đặc biệt
+             + fullName: check độ dài(2-50), check kí tự đặc biệt, check thêm bằng AI cho chuẩn.
            2. Tạo dữ liệu cho bảng user:
              + hashPassword, active = true, AuthProvider = LOCAL
            3. Tạo role cho user mới

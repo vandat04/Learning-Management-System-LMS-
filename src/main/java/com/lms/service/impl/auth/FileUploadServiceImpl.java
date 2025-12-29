@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Map;
 
@@ -21,26 +20,36 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public String uploadImage(MultipartFile file) throws IOException {
         validate.validateFile(file);
-        Map uploadResult = cloudinary.uploader().upload(
-                file.getBytes(),
-                ObjectUtils.asMap(
-                        "resource_type", "image",
-                        "folder", "images"
-                )
-        );
-        return uploadResult.get("secure_url").toString();
+        try {
+            Map uploadResult = cloudinary.uploader().upload(
+                    file.getBytes(),
+                    ObjectUtils.asMap(
+                            "resource_type", "image",
+                            "folder", "images"
+                    )
+            );
+            return uploadResult.get("secure_url").toString();
+        } catch (Exception e) {
+            validate.saveError(2);
+            return "";
+        }
     }
 
     @Override
-    public String uploadVideo(MultipartFile file) throws IOException{
+    public String uploadVideo(MultipartFile file) throws IOException {
         validate.validateFile(file);
-        Map uploadResult = cloudinary.uploader().upload(
-                file.getBytes(),
-                ObjectUtils.asMap(
-                        "resource_type", "video",
-                        "folder", "videos"
-                )
-        );
-        return uploadResult.get("secure_url").toString();
+        try {
+            Map uploadResult = cloudinary.uploader().upload(
+                    file.getBytes(),
+                    ObjectUtils.asMap(
+                            "resource_type", "video",
+                            "folder", "videos"
+                    )
+            );
+            return uploadResult.get("secure_url").toString();
+        } catch (Exception e) {
+            validate.saveError(2);
+            return "";
+        }
     }
 }

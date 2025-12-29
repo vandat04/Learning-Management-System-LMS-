@@ -1,7 +1,6 @@
 package com.lms.controller.auth;
 
 import com.lms.dto.request.*;
-
 import com.lms.service.auth.AuthService;
 import com.lms.service.auth.JwtService;
 import com.lms.service.auth.LogoutService;
@@ -10,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
 @RestController

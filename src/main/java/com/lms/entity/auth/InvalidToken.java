@@ -2,7 +2,6 @@ package com.lms.entity.auth;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.Date;
 
 @Entity

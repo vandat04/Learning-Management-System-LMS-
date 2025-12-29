@@ -7,7 +7,6 @@ import com.lms.dto.request.UserUpdateProfileRequest;
 import com.lms.dto.response.UserProfileResponse;
 import com.lms.entity.auth.User;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 
 public interface UserService {

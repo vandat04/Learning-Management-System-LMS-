@@ -2,20 +2,20 @@ package com.lms.util;
 
 import com.lms.entity.auth.User;
 import com.lms.entity.common.BannedWord;
+import com.lms.entity.common.ErrorSystemLog;
 import com.lms.entity.interaction.OTP;
 import com.lms.exception.AppException;
 import com.lms.repository.auth.UserRepository;
 import com.lms.repository.common.BannedWordRepository;
+import com.lms.repository.common.ErrorSystemLogRepository;
 import com.lms.repository.interaction.OTPRespository;
+import com.lms.service.common.AIService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -26,7 +26,10 @@ public class Validate {
     private final UserRepository userRepository;
     private final OTPRespository otpRespository;
     private final BannedWordRepository bannedWordRepository;
+    private final ErrorSystemLogRepository errorSystemLogRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final AIService aiService;
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -175,13 +178,13 @@ public class Validate {
         return passwordEncoder.matches(code, codeHash);
     }
 
-    public void validateFile(MultipartFile file){
+    public void validateFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new AppException("The file is empty or does not exist.", HttpStatus.BAD_REQUEST);
         }
     }
 
-    public void validateBio(String bio){
+    public void validateBio(String bio) {
         List<BannedWord> list = bannedWordRepository.findAll();
         for (BannedWord banned : list) {
             if (bio.contains(banned.getWord())) {
@@ -190,4 +193,21 @@ public class Validate {
         }
     }
 
+    //8. AI check badword
+    public void validateByAI(String text) {
+        String result = aiService.checkText(text);
+        if (result.equals("error")) {
+            saveError(1);
+        }
+        if (result.equals("false")) {
+            throw new AppException("The content contains inappropriate or restricted words!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public void saveError(Integer type) {
+        ErrorSystemLog error = errorSystemLogRepository.findErrorSystemLogById(type);
+        error.setCreatedAt(LocalDateTime.now());
+        error.setActive(1);
+        errorSystemLogRepository.save(error);
+    }
 }

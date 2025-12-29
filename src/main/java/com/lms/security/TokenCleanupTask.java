@@ -1,12 +1,10 @@
 package com.lms.security;
 
-import com.lms.repository.auth.InvalidTokenRepository;
 import com.lms.service.auth.LogoutService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 
 @Component

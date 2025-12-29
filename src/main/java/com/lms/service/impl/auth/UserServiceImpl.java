@@ -26,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 
@@ -83,6 +82,7 @@ public class UserServiceImpl implements UserService {
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
         if (fullName != null ) {
             validate.validateFullName(fullName);
+            validate.validateByAI(fullName);
             userProfile.setFullName(fullName);
         }
         if (phone != null) {
@@ -91,6 +91,7 @@ public class UserServiceImpl implements UserService {
         }
         if (bio != null) {
             validate.validateBio(bio);
+            validate.validateByAI(bio);
             userProfile.setBio(bio);
         }
 
