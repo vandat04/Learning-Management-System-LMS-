@@ -79,3 +79,7 @@ nếu trùng thì lấy Role rồi tạo JWT
     SQL: invalid_tokens
     Luồng: 1. Lưu vào invalid_token để không thể sử dụng ở mọi nơi nữa
 
+
+------
+Refresh:
+Tự động xoá token logout mỗi ngày

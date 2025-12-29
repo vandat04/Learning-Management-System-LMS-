@@ -1,9 +1,9 @@
 package com.lms.service.impl.auth;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.lms.dto.request.LoginGoogleRequest;
-import com.lms.dto.request.LoginRequest;
-import com.lms.dto.request.RegisterRequest;
+import com.lms.dto.request.auth.authentication.LoginGoogleRequest;
+import com.lms.dto.request.auth.authentication.LoginRequest;
+import com.lms.dto.request.auth.authentication.RegisterRequest;
 import com.lms.entity.auth.Role;
 import com.lms.entity.auth.User;
 import com.lms.entity.auth.UserProfile;

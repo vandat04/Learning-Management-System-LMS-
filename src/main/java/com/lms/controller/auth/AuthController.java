@@ -1,6 +1,10 @@
 package com.lms.controller.auth;
 
-import com.lms.dto.request.*;
+import com.lms.dto.request.auth.authentication.LoginGoogleRequest;
+import com.lms.dto.request.auth.authentication.LoginRequest;
+import com.lms.dto.request.auth.authentication.RegisterRequest;
+import com.lms.dto.request.auth.profile.UserGetOTPRequest;
+import com.lms.dto.request.auth.profile.UserResetPasswordRequest;
 import com.lms.service.auth.AuthService;
 import com.lms.service.auth.JwtService;
 import com.lms.service.auth.LogoutService;

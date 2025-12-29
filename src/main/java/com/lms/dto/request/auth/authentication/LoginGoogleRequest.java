@@ -1,4 +1,4 @@
-package com.lms.dto.request;
+package com.lms.dto.request.auth.authentication;
 
 import lombok.Data;
 import lombok.Getter;

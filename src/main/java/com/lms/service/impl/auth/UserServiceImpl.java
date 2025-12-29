@@ -1,17 +1,18 @@
 package com.lms.service.impl.auth;
 
-import com.lms.dto.request.UserChangePasswordRequest;
-import com.lms.dto.request.UserGetOTPRequest;
-import com.lms.dto.request.UserResetPasswordRequest;
-import com.lms.dto.request.UserUpdateProfileRequest;
-import com.lms.dto.response.UserProfileResponse;
+import com.lms.dto.request.auth.profile.SubmitInstructorApplicationRequest;
+import com.lms.dto.request.auth.profile.UserChangePasswordRequest;
+import com.lms.dto.request.auth.profile.UserGetOTPRequest;
+import com.lms.dto.request.auth.profile.UserResetPasswordRequest;
+import com.lms.dto.request.auth.profile.UserUpdateProfileRequest;
+import com.lms.dto.response.auth.profile.UserProfileResponse;
+import com.lms.entity.auth.Certification;
+import com.lms.entity.auth.InstructorApplication;
 import com.lms.entity.auth.User;
 import com.lms.entity.auth.UserProfile;
 import com.lms.entity.interaction.OTP;
 import com.lms.exception.AppException;
-import com.lms.repository.auth.UserProfileRepository;
-import com.lms.repository.auth.UserRepository;
-import com.lms.repository.auth.UserRoleRepository;
+import com.lms.repository.auth.*;
 import com.lms.repository.interaction.OTPRespository;
 import com.lms.service.auth.EmailService;
 import com.lms.service.auth.FileUploadService;
@@ -26,8 +27,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +47,14 @@ public class UserServiceImpl implements UserService {
     private final Validate validate;
     private final BaseResponse baseResponse;
     private final PasswordEncoder passwordEncoder;
+    private final InstructorApplicationRepository instructorApplicationRepository;
+    private final CertificationRepository certificationRepository;
 
+    public Integer getUserId() {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        validate.checkNull(userId);
+        return userId;
+    }
 
     @Override
     public User findByEmail(String email) {
@@ -68,7 +79,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserProfileResponse userUpdateProfile(UserUpdateProfileRequest request) {
 
-        Integer userId = SecurityUtil.getCurrentUserId();
+        Integer userId = getUserId();
+
         String fullName = request.getFullName();
         String phone = request.getPhone();
         String bio = request.getBio();
@@ -80,7 +92,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
-        if (fullName != null ) {
+        if (fullName != null) {
             validate.validateFullName(fullName);
             validate.validateByAI(fullName);
             userProfile.setFullName(fullName);
@@ -101,8 +113,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfileResponse userUpdateImageProfile(MultipartFile file)  throws IOException{
-        Integer userId = SecurityUtil.getCurrentUserId();
+    public UserProfileResponse userUpdateImageProfile(MultipartFile file) throws IOException {
+
+        Integer userId = getUserId();
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
         String avetarUrl = fileUploadService.uploadImage(file);
         userProfile.setAvatarUrl(avetarUrl);
@@ -112,14 +125,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changePassword(UserChangePasswordRequest request) {
-
-        Integer userId = SecurityUtil.getCurrentUserId();
+        Integer userId = getUserId();
         validate.checkNull(userId);
         User user = userRepository.findById(userId);
 
         String oldPassword = request.getOldPassword();
 
-        validate.checkPasswordMatch(oldPassword,user.getPasswordHash() );
+        validate.checkPasswordMatch(oldPassword, user.getPasswordHash());
 
         String newPassword = request.getNewPassword();
         String confirmPassword = request.getConfirmPassword();
@@ -147,7 +159,7 @@ public class UserServiceImpl implements UserService {
 
         //Kiểm tra xem đã có yêu cầu tạo OTP trc đó hay chưa
         OTP otp = otpRespository.findByEmail(email);
-        if ( otp == null ){
+        if (otp == null) {
             otp = new OTP();
             otp.setEmail(email);
         }
@@ -181,6 +193,58 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email);
         user.setPasswordHash(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+    @Override
+    public UserProfileResponse getUserProfile() {
+        Integer userId = getUserId();
+        return baseResponse.getUserProfile(userId);
+    }
+
+    @Override
+    public void submitInstructorApplication(SubmitInstructorApplicationRequest request) throws IOException {
+        //Láy userId từ token, hạn chế spam
+        Integer userId = getUserId();
+        validate.checkSpamApplyInstructor(userId);
+
+        List<String> titleList = request.getTitle();
+        List<MultipartFile> fileList = request.getFile();
+        validate.checkNull(titleList);
+        validate.checkNull(fileList);
+        if (titleList.size() != fileList.size()) {
+            throw new AppException("Insufficient titles for the files.", HttpStatus.BAD_REQUEST);
+        }
+
+        //Check and Add certification into application
+        List<Certification> certificationList = new ArrayList<>();
+        for (int i = 0; i < titleList.size(); i++) {
+            String title = titleList.get(i);
+            validate.checkNull(title);
+            validate.validateByAI(title);
+            validate.validateBio(title);
+
+            MultipartFile file = fileList.get(i);
+            validate.validateFile(file);
+
+            Certification certification = new Certification();
+            certification.setTitle(title);
+            certification.setDocumentUrl(fileUploadService.uploadImage(file));
+            //Add
+            certificationList.add(certification);
+        }
+
+        //Create new application
+        InstructorApplication instructorApplication = new InstructorApplication();
+        instructorApplication.setUserId(userId);
+        instructorApplication.setIsApproved(0);
+        instructorApplication.setSubmittedAt(LocalDateTime.now());
+        Integer applicationId = instructorApplicationRepository.save(instructorApplication).getId();
+
+        //Save
+        for(Certification item : certificationList){
+            item.setApplicationId(applicationId);
+            certificationRepository.save(item);
+        }
     }
 
 }

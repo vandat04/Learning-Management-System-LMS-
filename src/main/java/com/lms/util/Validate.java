@@ -5,6 +5,7 @@ import com.lms.entity.common.BannedWord;
 import com.lms.entity.common.ErrorSystemLog;
 import com.lms.entity.interaction.OTP;
 import com.lms.exception.AppException;
+import com.lms.repository.auth.InstructorApplicationRepository;
 import com.lms.repository.auth.UserRepository;
 import com.lms.repository.common.BannedWordRepository;
 import com.lms.repository.common.ErrorSystemLogRepository;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
@@ -28,6 +31,7 @@ public class Validate {
     private final BannedWordRepository bannedWordRepository;
     private final ErrorSystemLogRepository errorSystemLogRepository;
     private final PasswordEncoder passwordEncoder;
+    private final InstructorApplicationRepository instructorApplicationRepository;
 
     private final AIService aiService;
 
@@ -41,6 +45,12 @@ public class Validate {
     }
 
     public void checkNull(Integer request) {
+        if (request == null) {
+            throw new AppException("The element cannot be left blank!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public void checkNull(List<?> request){
         if (request == null) {
             throw new AppException("The element cannot be left blank!", HttpStatus.BAD_REQUEST);
         }
@@ -188,7 +198,7 @@ public class Validate {
         List<BannedWord> list = bannedWordRepository.findAll();
         for (BannedWord banned : list) {
             if (bio.contains(banned.getWord())) {
-                throw new AppException("The bio contains inappropriate or restricted words!", HttpStatus.BAD_REQUEST);
+                throw new AppException("The content contains inappropriate or restricted words!", HttpStatus.BAD_REQUEST);
             }
         }
     }
@@ -203,11 +213,22 @@ public class Validate {
             throw new AppException("The content contains inappropriate or restricted words!", HttpStatus.BAD_REQUEST);
         }
     }
-
+    //9. Lưu lỗi hệ thống
     public void saveError(Integer type) {
         ErrorSystemLog error = errorSystemLogRepository.findErrorSystemLogById(type);
         error.setCreatedAt(LocalDateTime.now());
         error.setActive(1);
         errorSystemLogRepository.save(error);
+    }
+
+    //10. Check spam apply instructor
+    public void checkSpamApplyInstructor(Integer userId){
+        LocalDate today = LocalDate.now();
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay();
+        Long count = instructorApplicationRepository.countApplyByUserId(userId,start,end);
+        if (count >= 3){
+            throw new AppException("You've sent too many messages today. Please be patient and wait for a response from the admin", HttpStatus.BAD_REQUEST);
+        }
     }
 }

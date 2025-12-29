@@ -1,6 +1,6 @@
 package com.lms.util;
 
-import com.lms.dto.response.UserProfileResponse;
+import com.lms.dto.response.auth.profile.UserProfileResponse;
 import com.lms.entity.auth.Role;
 import com.lms.entity.auth.User;
 import com.lms.entity.auth.UserProfile;

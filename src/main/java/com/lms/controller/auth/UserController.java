@@ -1,8 +1,9 @@
 package com.lms.controller.auth;
 
-import com.lms.dto.request.UserChangePasswordRequest;
-import com.lms.dto.request.UserUpdateProfileRequest;
-import com.lms.dto.response.UserProfileResponse;
+import com.lms.dto.request.auth.profile.SubmitInstructorApplicationRequest;
+import com.lms.dto.request.auth.profile.UserChangePasswordRequest;
+import com.lms.dto.request.auth.profile.UserUpdateProfileRequest;
+import com.lms.dto.response.auth.profile.UserProfileResponse;
 import com.lms.service.auth.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.*;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -48,6 +49,23 @@ public class UserController {
     {
         userService.changePassword(request);
         return ResponseEntity.ok("Change password successfully");
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfile() {
+        UserProfileResponse response = userService.getUserProfile();
+        return ResponseEntity.ok(
+                Map.of(
+                        "message", "Get profile successfully",
+                        "data", response
+                )
+        );
+    }
+
+    @PostMapping("/apply-instructor")
+    public ResponseEntity<?> applyInstructor(@ModelAttribute SubmitInstructorApplicationRequest request) throws IOException {
+        userService.submitInstructorApplication(request);
+        return ResponseEntity.ok("Get profile successfully");
     }
 
 }

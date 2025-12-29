@@ -1,4 +1,4 @@
-package com.lms.dto.response;
+package com.lms.dto.response.auth.profile;
 
 import lombok.Data;
 import lombok.Getter;
@@ -20,8 +20,6 @@ public class UserProfileResponse {
     private Integer numberReview;
     private String role;
     private boolean isActive;
-    private String authProvider;
-    private String googleId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
