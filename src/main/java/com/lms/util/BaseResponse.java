@@ -1,18 +1,16 @@
 package com.lms.util;
 
+import com.lms.dto.response.admin.user.InstructorApplicationResponse;
 import com.lms.dto.response.auth.profile.UserProfileResponse;
-import com.lms.entity.auth.Role;
-import com.lms.entity.auth.User;
-import com.lms.entity.auth.UserProfile;
-import com.lms.entity.auth.UserRole;
+import com.lms.entity.auth.*;
 import com.lms.exception.AppException;
-import com.lms.repository.auth.RoleRepository;
-import com.lms.repository.auth.UserProfileRepository;
-import com.lms.repository.auth.UserRepository;
-import com.lms.repository.auth.UserRoleRepository;
+import com.lms.repository.auth.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +21,8 @@ public class BaseResponse {
     private final UserProfileRepository userProfileRepository;
     private final UserRoleRepository userRoleRepository;
     private final RoleRepository roleRepository;
+    private final InstructorApplicationRepository instructorApplicationRepository;
+    private final CertificationRepository certificationRepository;
 
     public UserProfileResponse getUserProfile(Integer userId){
         validate.checkNull(userId);
@@ -49,5 +49,48 @@ public class BaseResponse {
         userProfileResponse.setUpdatedAt(user.getUpdatedAt());
 
         return userProfileResponse;
+    }
+
+    public List<InstructorApplicationResponse> getInstructorApply(Integer userId){
+        validate.checkNull(userId);
+
+        List<InstructorApplicationResponse> list = new ArrayList<>();
+
+        InstructorApplicationResponse profile;
+        UserProfileResponse user = getUserProfile(userId);
+        List<InstructorApplication> applyList = instructorApplicationRepository.findInstructorApplicationByUserId(userId);
+        List<Certification> cerList;
+
+        for (InstructorApplication item : applyList){
+            cerList = certificationRepository.findCertificationByApplicationId(item.getId());
+
+            profile = new InstructorApplicationResponse();
+            profile.setUserProfileResponse(user);
+            profile.setInstructorApplication(item);
+            profile.setCertification(cerList);
+
+            list.add(profile);
+        }
+
+        return list;
+    }
+
+    public InstructorApplicationResponse getSingleInstructorApply(Integer applicationId){
+        //Get Instructor application by applicationId
+        validate.checkNull(applicationId);
+        InstructorApplication apply = instructorApplicationRepository.findById(applicationId).orElseThrow(()
+                -> new AppException("Can not find apply by your id", HttpStatus.BAD_REQUEST));
+        //Get user full infor
+        Integer userId = apply.getUserId();
+        UserProfileResponse user = getUserProfile(userId);
+        //Get Certification by applicationId
+        List<Certification> cerList = certificationRepository.findCertificationByApplicationId(applicationId);
+        //Get Instructor application full
+        InstructorApplicationResponse profile = new InstructorApplicationResponse();
+        profile.setUserProfileResponse(user);
+        profile.setInstructorApplication(apply);
+        profile.setCertification(cerList);
+
+        return profile;
     }
 }

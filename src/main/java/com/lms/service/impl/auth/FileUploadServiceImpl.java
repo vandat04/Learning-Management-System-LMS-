@@ -1,7 +1,7 @@
 package com.lms.service.impl.auth;
 
 import com.cloudinary.Cloudinary;
-import com.lms.service.auth.FileUploadService;
+import com.lms.service.core.auth.FileUploadService;
 import com.lms.util.Validate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

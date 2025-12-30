@@ -1,7 +1,7 @@
 package com.lms.security;
 
 import com.lms.exception.AppException;
-import com.lms.service.auth.JwtService;
+import com.lms.service.core.auth.JwtService;
 import com.lms.service.impl.auth.LogoutServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

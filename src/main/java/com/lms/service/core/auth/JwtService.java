@@ -1,4 +1,4 @@
-package com.lms.service.auth;
+package com.lms.service.core.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;

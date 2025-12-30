@@ -1,10 +1,6 @@
-package com.lms.service.auth;
+package com.lms.service.core.auth;
 
-import com.lms.dto.request.auth.profile.SubmitInstructorApplicationRequest;
-import com.lms.dto.request.auth.profile.UserChangePasswordRequest;
-import com.lms.dto.request.auth.profile.UserGetOTPRequest;
-import com.lms.dto.request.auth.profile.UserResetPasswordRequest;
-import com.lms.dto.request.auth.profile.UserUpdateProfileRequest;
+import com.lms.dto.request.auth.profile.*;
 import com.lms.dto.response.auth.profile.UserProfileResponse;
 import com.lms.entity.auth.User;
 import org.springframework.web.multipart.MultipartFile;

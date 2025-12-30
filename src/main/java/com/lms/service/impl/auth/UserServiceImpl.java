@@ -1,10 +1,6 @@
 package com.lms.service.impl.auth;
 
-import com.lms.dto.request.auth.profile.SubmitInstructorApplicationRequest;
-import com.lms.dto.request.auth.profile.UserChangePasswordRequest;
-import com.lms.dto.request.auth.profile.UserGetOTPRequest;
-import com.lms.dto.request.auth.profile.UserResetPasswordRequest;
-import com.lms.dto.request.auth.profile.UserUpdateProfileRequest;
+import com.lms.dto.request.auth.profile.*;
 import com.lms.dto.response.auth.profile.UserProfileResponse;
 import com.lms.entity.auth.Certification;
 import com.lms.entity.auth.InstructorApplication;
@@ -14,9 +10,9 @@ import com.lms.entity.interaction.OTP;
 import com.lms.exception.AppException;
 import com.lms.repository.auth.*;
 import com.lms.repository.interaction.OTPRespository;
-import com.lms.service.auth.EmailService;
-import com.lms.service.auth.FileUploadService;
-import com.lms.service.auth.UserService;
+import com.lms.service.core.auth.EmailService;
+import com.lms.service.core.auth.FileUploadService;
+import com.lms.service.core.auth.UserService;
 import com.lms.util.BaseResponse;
 import com.lms.util.SecurityUtil;
 import com.lms.util.Validate;

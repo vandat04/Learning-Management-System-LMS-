@@ -2,7 +2,7 @@ package com.lms.service.impl.auth;
 
 import com.lms.entity.interaction.Email;
 import com.lms.exception.AppException;
-import com.lms.service.auth.EmailService;
+import com.lms.service.core.auth.EmailService;
 import com.lms.util.Validate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

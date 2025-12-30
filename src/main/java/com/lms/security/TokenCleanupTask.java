@@ -1,6 +1,6 @@
 package com.lms.security;
 
-import com.lms.service.auth.LogoutService;
+import com.lms.service.core.auth.LogoutService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

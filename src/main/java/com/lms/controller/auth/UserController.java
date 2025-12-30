@@ -4,7 +4,7 @@ import com.lms.dto.request.auth.profile.SubmitInstructorApplicationRequest;
 import com.lms.dto.request.auth.profile.UserChangePasswordRequest;
 import com.lms.dto.request.auth.profile.UserUpdateProfileRequest;
 import com.lms.dto.response.auth.profile.UserProfileResponse;
-import com.lms.service.auth.UserService;
+import com.lms.service.core.auth.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

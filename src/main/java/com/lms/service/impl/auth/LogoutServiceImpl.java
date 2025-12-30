@@ -2,8 +2,8 @@ package com.lms.service.impl.auth;
 
 import com.lms.entity.auth.InvalidToken;
 import com.lms.repository.auth.InvalidTokenRepository;
-import com.lms.service.auth.JwtService;
-import com.lms.service.auth.LogoutService;
+import com.lms.service.core.auth.JwtService;
+import com.lms.service.core.auth.LogoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;

@@ -10,7 +10,7 @@ import com.lms.repository.auth.UserRepository;
 import com.lms.repository.common.BannedWordRepository;
 import com.lms.repository.common.ErrorSystemLogRepository;
 import com.lms.repository.interaction.OTPRespository;
-import com.lms.service.common.AIService;
+import com.lms.service.core.common.AIService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,7 +59,7 @@ public class Validate {
     //1. Check mail
     public void validateEmail(String email) {
         checkEmailNotExists(email);
-        validateGmailFormat(email);
+        validateEmailFormat(email);
     }
 
     public void checkEmailNotExists(String email) {
@@ -74,7 +74,7 @@ public class Validate {
         }
     }
 
-    public void validateGmailFormat(String email) {
+    public void validateEmailFormat(String email) {
         email = email.trim().toLowerCase();
 
         if (!email.endsWith("@gmail.com")) {
@@ -229,6 +229,13 @@ public class Validate {
         Long count = instructorApplicationRepository.countApplyByUserId(userId,start,end);
         if (count >= 3){
             throw new AppException("You've sent too many messages today. Please be patient and wait for a response from the admin", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //11. Check end before start
+    public void checkEndBeforeStart(LocalDateTime start, LocalDateTime end){
+        if (!start.isBefore(end)){
+            throw new AppException("You should choose an end date after the start date.", HttpStatus.BAD_REQUEST);
         }
     }
 }

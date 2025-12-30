@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface InstructorApplicationRepository extends JpaRepository<InstructorApplication, Integer> {
@@ -22,4 +24,18 @@ public interface InstructorApplicationRepository extends JpaRepository<Instructo
             @Param("startOfDay") LocalDateTime startOfDay,
             @Param("endOfDay") LocalDateTime endOfDay
     );
+
+    List<InstructorApplication> findInstructorApplicationByUserId(Integer userId);
+
+    @Query("""
+          SELECT DISTINCT ia.userId
+          FROM InstructorApplication ia
+    """)
+    List<Integer> getUserIdListInstructorApplication();
+
+    Optional<InstructorApplication> findById(Integer applicationId);
+
+    List<InstructorApplication> findByIsApproved(Integer isApprove);
+
+    List<InstructorApplication> findBySubmittedAtBetween(LocalDateTime start, LocalDateTime end);
 }

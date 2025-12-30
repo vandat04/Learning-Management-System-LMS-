@@ -1,6 +1,6 @@
 package com.lms.service.impl.common;
 
-import com.lms.service.common.AIService;
+import com.lms.service.core.common.AIService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

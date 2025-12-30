@@ -1,7 +1,7 @@
 package com.lms.service.impl.auth;
 
 import org.springframework.beans.factory.annotation.Value;
-import com.lms.service.auth.JwtService;
+import com.lms.service.core.auth.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
