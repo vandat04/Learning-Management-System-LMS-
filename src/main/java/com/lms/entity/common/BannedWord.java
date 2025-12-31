@@ -9,7 +9,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class BannedWord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

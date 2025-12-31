@@ -9,7 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "attendance",
         uniqueConstraints = @UniqueConstraint(columnNames = {"attendance_id","student_id"}))
-@Data
 public class Attendance {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Complaint {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

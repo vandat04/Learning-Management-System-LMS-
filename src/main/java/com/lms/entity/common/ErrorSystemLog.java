@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class ErrorSystemLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -8,7 +8,6 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class CourseCategory {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

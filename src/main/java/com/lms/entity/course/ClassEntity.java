@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class ClassEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -23,4 +22,8 @@ public class ClassEntity {
     private LocalDateTime startAt;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "end_at")
+    private LocalDateTime endAt;
+    @Column(name = "is_active")
+    private Integer isActive;
 }

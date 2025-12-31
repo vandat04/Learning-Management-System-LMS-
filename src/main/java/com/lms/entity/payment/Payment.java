@@ -10,16 +10,11 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Payment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "user_id")
     private Integer userId;
-    @Column(name = "course_id")
-    private Integer courseId;
-    @Column(name = "plan_id")
-    private Integer planId;
     @Column(name = "amount")
     private BigDecimal amount;
     @Column(name = "payment_type")
@@ -30,4 +25,10 @@ public class Payment {
     private Integer status;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "paid_at")
+    private LocalDateTime paidAt;
+    @Column(name = "order_code")
+    private Long orderCode;
+    @Column(name = "invoice_id")
+    private String invoiceId;
 }

@@ -9,7 +9,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Certification {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
