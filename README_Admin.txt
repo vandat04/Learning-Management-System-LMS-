@@ -43,5 +43,20 @@
    Luồng: 1. Lấy ra danh sách applicationId theo start between end
           2. Lấy ra danh sách theo từng applicationId
 
+---------------------------------------------------------------------------------------------
+                SUBCRIPTION PLANS
+1. View all subscription plans
+
+2. View Single plan by id
+3. View by Filter active/unactive
+4. Create subscription plans
+
+5. Update Status
+6. Search plan theo thời gian duration
+7. Thống kê gói mua nhiều nhất
+8. Xem số hạn sử dụng của từng user
+
+
+SQL: subscription_plans, instructor_subscriptions, subscriptions_time
 ----------
 Phân trang
