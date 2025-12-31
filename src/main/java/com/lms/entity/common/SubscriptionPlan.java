@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class SubscriptionPlan {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -236,6 +237,17 @@ public class Validate {
     public void checkEndBeforeStart(LocalDateTime start, LocalDateTime end){
         if (!start.isBefore(end)){
             throw new AppException("You should choose an end date after the start date.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //12. Check số nguyên
+
+    public void isInteger(BigDecimal number) {
+        if (number == null) {
+            throw new AppException("Please enter the integer in the correct format!", HttpStatus.BAD_REQUEST);
+        }
+        if (!(number.remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) == 0)){
+            throw new AppException("Please enter the integer in the correct format!", HttpStatus.BAD_REQUEST);
         }
     }
 }
