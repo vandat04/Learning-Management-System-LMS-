@@ -7,8 +7,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-
 public class PageResponse<T> {
 
     private List<T> content;

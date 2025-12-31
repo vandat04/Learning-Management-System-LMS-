@@ -10,7 +10,6 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class InvalidToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

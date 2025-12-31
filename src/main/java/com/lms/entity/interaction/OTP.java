@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class OTP {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

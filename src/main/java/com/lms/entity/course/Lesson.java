@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Lesson {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

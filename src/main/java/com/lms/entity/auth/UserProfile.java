@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class UserProfile {
     @Id
     @Column(name = "user_id")

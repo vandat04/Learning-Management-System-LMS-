@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class ChatGroup {
     @Id
     @Column(name = "id")
