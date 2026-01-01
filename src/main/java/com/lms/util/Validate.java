@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.parser.Entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,6 +47,12 @@ public class Validate {
     }
 
     public void checkNull(Integer request) {
+        if (request == null) {
+            throw new AppException("The element cannot be left blank!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public void checkNull(Boolean request) {
         if (request == null) {
             throw new AppException("The element cannot be left blank!", HttpStatus.BAD_REQUEST);
         }
@@ -241,7 +248,6 @@ public class Validate {
     }
 
     //12. Check số nguyên
-
     public void isInteger(BigDecimal number) {
         if (number == null) {
             throw new AppException("Please enter the integer in the correct format!", HttpStatus.BAD_REQUEST);

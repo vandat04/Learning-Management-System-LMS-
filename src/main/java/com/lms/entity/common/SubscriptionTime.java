@@ -1,4 +1,4 @@
-package com.lms.entity.learning;
+package com.lms.entity.common;
 
 import jakarta.persistence.*;
 import lombok.*;

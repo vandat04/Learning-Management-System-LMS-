@@ -1,7 +1,6 @@
-package com.lms.entity.learning;
+package com.lms.entity.common;
 
 import com.lms.entity.auth.User;
-import com.lms.entity.common.SubscriptionPlan;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
