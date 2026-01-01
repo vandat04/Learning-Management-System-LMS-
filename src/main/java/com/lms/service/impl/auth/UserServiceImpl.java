@@ -15,6 +15,7 @@ import com.lms.service.core.auth.FileUploadService;
 import com.lms.service.core.auth.UserService;
 import com.lms.util.BaseResponse;
 import com.lms.util.SecurityUtil;
+import com.lms.util.Util;
 import com.lms.util.Validate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -45,12 +46,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final InstructorApplicationRepository instructorApplicationRepository;
     private final CertificationRepository certificationRepository;
-
-    public Integer getUserId() {
-        Integer userId = SecurityUtil.getCurrentUserId();
-        validate.checkNull(userId);
-        return userId;
-    }
+    private final Util util;
 
     @Override
     public User findByEmail(String email) {
@@ -75,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserProfileResponse userUpdateProfile(UserUpdateProfileRequest request) {
 
-        Integer userId = getUserId();
+        Integer userId = util.getUserId();
 
         String fullName = request.getFullName();
         String phone = request.getPhone();
@@ -111,7 +107,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileResponse userUpdateImageProfile(MultipartFile file) throws IOException {
 
-        Integer userId = getUserId();
+        Integer userId = util.getUserId();
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
         String avetarUrl = fileUploadService.uploadImage(file);
         userProfile.setAvatarUrl(avetarUrl);
@@ -121,7 +117,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changePassword(UserChangePasswordRequest request) {
-        Integer userId = getUserId();
+        Integer userId = util.getUserId();
         validate.checkNull(userId);
         User user = userRepository.findById(userId);
 
@@ -193,14 +189,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileResponse getUserProfile() {
-        Integer userId = getUserId();
+        Integer userId = util.getUserId();
         return baseResponse.getUserProfile(userId);
     }
 
     @Override
     public void submitInstructorApplication(SubmitInstructorApplicationRequest request) throws IOException {
         //Láy userId từ token, hạn chế spam
-        Integer userId = getUserId();
+        Integer userId = util.getUserId();
         validate.checkSpamApplyInstructor(userId);
 
         List<String> titleList = request.getTitle();

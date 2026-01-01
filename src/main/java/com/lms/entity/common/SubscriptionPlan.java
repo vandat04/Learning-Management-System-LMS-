@@ -15,8 +15,8 @@ public class SubscriptionPlan {
     private Integer id;
     @Column(name = "name")
     private String name;
-    @Column(name = "duration_months")
-    private Integer durationMonths;
+    @Column(name = "duration_days")
+    private Integer durationDays;
     @Column(name = "price")
     private BigDecimal price;
     @Column(name = "is_active")
