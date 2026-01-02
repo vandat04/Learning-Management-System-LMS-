@@ -82,7 +82,7 @@ public class ManagerServicePackageController {
             @PathVariable Boolean isActive,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size){
-        List<SubscriptionPlan> list = subscriptionPlanService.getSubscriptionPlanByDayFilter(from, to, isActive);
+        List<SubscriptionPlan> list = subscriptionPlanService.getSubscriptionPlanByPriceFilter(from, to, isActive);
         return PageUtil.paginate(list, page, size);
     }
 

@@ -41,7 +41,7 @@ public class Validate {
 
     //0.Check null
     public void checkNull(String request) {
-        if (request == null) {
+        if (request == null || request.isBlank()) {
             throw new AppException("The element cannot be left blank!", HttpStatus.BAD_REQUEST);
         }
     }
@@ -254,6 +254,13 @@ public class Validate {
         }
         if (!(number.remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) == 0)){
             throw new AppException("Please enter the integer in the correct format!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public void isPositiveInteger(BigDecimal number) {
+        isInteger(number);
+        if (number.intValue() <= 0){
+            throw new AppException("Please enter the positive integer in the correct format!", HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -45,7 +45,7 @@ public class UserRegisterPlanController {
             @PathVariable Double to,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size){
-        List<SubscriptionPlan> list = subscriptionPlanService.getSubscriptionPlanByDayFilter(from, to, true);
+        List<SubscriptionPlan> list = subscriptionPlanService.getSubscriptionPlanByPriceFilter(from, to, true);
         return PageUtil.paginate(list, page, size);
     }
 

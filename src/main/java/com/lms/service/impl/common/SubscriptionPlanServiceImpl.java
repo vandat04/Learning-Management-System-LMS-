@@ -48,8 +48,17 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
 
     @Override
     public List<SubscriptionPlan> getSubscriptionPlanByDayFilter(Double from, Double to, Boolean isActive) {
-        Integer f = (int) Math.floor(from);
-        Integer t = (int) Math.ceil(to);
+        if (from == null) from = 0.0;
+        if (to == null) to = 0.0;
+
+        int f = (int) Math.floor(from);
+        int t = (int) Math.ceil(to);
+
+        if (t < f ){
+            Integer temp = t;
+            t = f;
+            f = temp;
+        }
         return subscriptionRepository.findByDurationDaysBetweenAndIsActive(f, t, isActive);
     }
 
@@ -64,9 +73,18 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
 
     @Override
     public List<SubscriptionPlan> getSubscriptionPlanByPriceFilter(Double from, Double to, Boolean isActive) {
-        Integer f = (int) Math.floor(from);
-        Integer t = (int) Math.ceil(to);
-        return subscriptionRepository.findByDurationDaysBetweenAndIsActive(f, t, isActive);
+        if (from == null) from = 0.0;
+        if (to == null) to = 0.0;
+
+        int f = (int) Math.floor(from);
+        int t = (int) Math.ceil(to);
+
+        if (t < f ){
+            Integer temp = t;
+            t = f;
+            f = temp;
+        }
+        return subscriptionRepository.findByPriceBetweenAndIsActive(f, t, isActive);
     }
 
 

@@ -22,6 +22,8 @@ public class Course {
     private String description;
     @Column(name = "price")
     private BigDecimal price;
+    @Column(name = "price_with_onl")
+    private BigDecimal priceWithOnl;
     @Column(name = "status")
     private Integer status;
     @Column(name = "rating_avg")
