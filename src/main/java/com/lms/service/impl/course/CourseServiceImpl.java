@@ -83,12 +83,14 @@ public class CourseServiceImpl implements CourseService {
         course.setCreatedAt(LocalDateTime.now());
         Integer courseId = courseRepository.save(course).getId();
 
-        for (Integer item : listCategory){
-            if (!courseCategoryRepository.existsByCourseIdAndCategoryId(courseId, item)) {
-                CourseCategory courseCategory = new CourseCategory();
-                courseCategory.setCourseId(courseId);
-                courseCategory.setCategoryId(item);
-                courseCategoryRepository.save(courseCategory);
+        if (listCategory != null && !listCategory.isEmpty()){
+            for (Integer item : listCategory){
+                if (!courseCategoryRepository.existsByCourseIdAndCategoryId(courseId, item)) {
+                    CourseCategory courseCategory = new CourseCategory();
+                    courseCategory.setCourseId(courseId);
+                    courseCategory.setCategoryId(item);
+                    courseCategoryRepository.save(courseCategory);
+                }
             }
         }
     }
