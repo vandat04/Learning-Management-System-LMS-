@@ -9,4 +9,5 @@ public interface SubscriptionPlanService {
     SubscriptionPlan getSubscriptionDetail(Integer planId);
     List<SubscriptionPlan> getSubscriptionPlanByDayFilter(Double from, Double to, Boolean isActive);
     List<SubscriptionPlan> findSubscriptionPlanByName(String name);
+    List<SubscriptionPlan> getSubscriptionPlanByPriceFilter(Double from, Double to, Boolean isActive);
 }

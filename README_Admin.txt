@@ -51,10 +51,9 @@
 3. View by Filter active/unactive
 4. Create subscription plans
 5. Update Status
-6. Search plan theo thời gian duration (chưa theo loại)       X
-7. Search plan theo giá. (chưa theo loại)                     X
-8. Search plan theo name (chưa theo loại)                     X
-9. Xoá vĩnh viễn nếu chưa có truy vấn vào bảng nào            X
+6. Search plan theo thời gian duration
+7. Search plan theo giá.
+8. Search plan theo name
 
 SQL: subscription_plans, instructor_subscriptions, subscriptions_time
 ---------------------------------------------------------------------------------------------

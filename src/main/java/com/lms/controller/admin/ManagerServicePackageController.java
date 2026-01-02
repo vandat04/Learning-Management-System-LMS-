@@ -75,6 +75,17 @@ public class ManagerServicePackageController {
         return PageUtil.paginate(list, page, size);
     }
 
+    @GetMapping("/view-plan/price/from={from}&to={to}&isActive={isActive}")
+    private PageResponse<?> getPlanByDay(
+            @PathVariable Double from,
+            @PathVariable Double to,
+            @PathVariable Boolean isActive,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+        List<SubscriptionPlan> list = subscriptionPlanService.getSubscriptionPlanByDayFilter(from, to, isActive);
+        return PageUtil.paginate(list, page, size);
+    }
+
     @GetMapping("/view-plan/search/name={name}")
     private PageResponse<?> searchPlanByName(
             @PathVariable String name,

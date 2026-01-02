@@ -39,6 +39,16 @@ public class UserRegisterPlanController {
         return PageUtil.paginate(list, page, size);
     }
 
+    @GetMapping("/view/price/from={from}&to={to}")
+    private PageResponse<?> getPlanByDay(
+            @PathVariable Double from,
+            @PathVariable Double to,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+        List<SubscriptionPlan> list = subscriptionPlanService.getSubscriptionPlanByDayFilter(from, to, true);
+        return PageUtil.paginate(list, page, size);
+    }
+
     @GetMapping("/view/{planId}")
     public ResponseEntity<?> getPlanDetail(@PathVariable Integer planId) {
         SubscriptionPlan response = subscriptionPlanService.getSubscriptionDetail(planId);

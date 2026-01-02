@@ -62,5 +62,12 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
         }
     }
 
+    @Override
+    public List<SubscriptionPlan> getSubscriptionPlanByPriceFilter(Double from, Double to, Boolean isActive) {
+        Integer f = (int) Math.floor(from);
+        Integer t = (int) Math.ceil(to);
+        return subscriptionRepository.findByDurationDaysBetweenAndIsActive(f, t, isActive);
+    }
+
 
 }

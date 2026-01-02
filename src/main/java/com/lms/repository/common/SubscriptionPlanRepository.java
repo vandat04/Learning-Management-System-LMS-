@@ -10,6 +10,7 @@ public interface SubscriptionPlanRepository extends JpaRepository<SubscriptionPl
     List<SubscriptionPlan> findByIsActive(Boolean isActive);
     boolean existsById(Integer planId);
     List<SubscriptionPlan> findByDurationDaysBetweenAndIsActive(Integer from, Integer to, Boolean isActive);
+    List<SubscriptionPlan> findByPriceBetweenAndIsActive(Integer from, Integer to, Boolean isActive);
     SubscriptionPlan findByIdAndIsActive(Integer planId, Boolean isActive);
 
     @Query("""

@@ -37,8 +37,6 @@ public class PaymentServiceImpl implements PaymentService {
     private final Util util;
     private final Validate validate;
 
-    long expiredAt = System.currentTimeMillis() / 1000L + 5 * 60L;
-
     @org.springframework.beans.factory.annotation.Value("${payos.returnUrl}")
     private String returnUrl;
     @org.springframework.beans.factory.annotation.Value("${payos.cancelUrl}")
@@ -69,8 +67,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = new Payment();
         PaymentItem paymentItem = new PaymentItem();
 
-        Integer paymentId;
-
+        long expiredAt = System.currentTimeMillis() / 1000L + 5 * 60L;
         // Tạo request thanh toán
         try {
             CreatePaymentLinkRequest payReq = CreatePaymentLinkRequest.builder()
@@ -89,7 +86,7 @@ public class PaymentServiceImpl implements PaymentService {
             payment.setOrderCode(orderCode);
             payment.setStatus(1); //PENDING
             payment.setCreatedAt(LocalDateTime.now());
-            paymentId = paymentRepository.save(payment).getId();
+            Integer paymentId = paymentRepository.save(payment).getId();
 
             //Create payment item
             paymentItem.setPaymentId(paymentId);
@@ -137,7 +134,7 @@ public class PaymentServiceImpl implements PaymentService {
             if ("00".equals(data.getCode())) {
                 payment.setStatus(2); // PAID
                 paymentRepository.save(payment);
-                handleSubscriptionTime(payment);
+                handleSubscriptionTime(payment); // Giải quyết thêm vào lớp học cho student mua khoá học
             } else {
                 payment.setStatus(5); // UNKNOWN / ERROR
                 paymentRepository.save(payment);

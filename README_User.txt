@@ -12,4 +12,9 @@
            3. Validate cho từng tile, file -> Add và list
            4. Nếu không lỗi thì tạo new instructor_application và add vào certifications
 
-3.
+3. View subscription plan
+    - View all
+    - View details
+    - Search plan by name
+    - Day/Duration/Price Filter
+    - Buy plan
